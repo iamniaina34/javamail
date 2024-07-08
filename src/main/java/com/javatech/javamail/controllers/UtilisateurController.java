@@ -1,5 +1,9 @@
 package com.javatech.javamail.controllers;
 
+import com.javatech.javamail.configs.SecurityConfiguration;
+import com.javatech.javamail.dtos.UtilisateurChangeMotDePasseDto;
+import com.javatech.javamail.dtos.UtilisateurCreationDto;
+import com.javatech.javamail.dtos.UtilisateurLoginDto;
 import com.javatech.javamail.models.Utilisateur;
 import com.javatech.javamail.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,47 +14,48 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/utilisateurs")
 public class UtilisateurController {
 
     @Autowired
-    private UtilisateurService utilisateurService;
+    private final UtilisateurService utilisateurService;
 
-    @GetMapping
+    public UtilisateurController (UtilisateurService utilisateurService) {
+        this.utilisateurService = utilisateurService;
+    }
+
+    @GetMapping({"", "/", "/index"})
     public List<Utilisateur> getAllUtilisateurs() {
         return utilisateurService.getAllUtilisateurs();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Utilisateur> getUtilisateurById(@PathVariable int id) {
-        Optional<Utilisateur> utilisateur = utilisateurService.getUtilisateurById(id);
-        return utilisateur.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public Optional<Utilisateur> getUtilisateurById(@PathVariable int id) {
+        return utilisateurService.getUtilisateurById(id);
     }
 
-    @PostMapping
-    public Utilisateur createUtilisateur(@RequestBody Utilisateur utilisateur) {
-        return utilisateurService.saveUtilisateur(utilisateur);
+    @PostMapping("/login")
+    public ResponseEntity<?> logInUtilisateur (@RequestBody UtilisateurLoginDto dto) {
+        return utilisateurService.login(dto);
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/create")
+    public Utilisateur createUtilisateur(@RequestBody UtilisateurCreationDto dto) {
+        return utilisateurService.createUser(dto);
+    }
+
+    @PutMapping("/update/{id}")
     public ResponseEntity<Utilisateur> updateUtilisateur(@PathVariable int id, @RequestBody Utilisateur utilisateurDetails) {
-        Optional<Utilisateur> utilisateur = utilisateurService.getUtilisateurById(id);
-
-        if (utilisateur.isPresent()) {
-            Utilisateur updatedUtilisateur = utilisateur.get();
-            updatedUtilisateur.setPseudo(utilisateurDetails.getPseudo());
-            updatedUtilisateur.setMail(utilisateurDetails.getMail());
-            updatedUtilisateur.setMotDePasse(utilisateurDetails.getMotDePasse());
-            updatedUtilisateur.setType(utilisateurDetails.getType());
-            updatedUtilisateur.setEstSupprime(utilisateurDetails.estSupprime());
-            return ResponseEntity.ok(utilisateurService.saveUtilisateur(updatedUtilisateur));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return utilisateurService.updateUtilisateur(id, utilisateurDetails);
     }
 
-    @DeleteMapping("/{id}")
+    @PutMapping("/reset/{id}")
+    public ResponseEntity<Utilisateur> changeMotDePasse (@PathVariable int id, @RequestBody UtilisateurChangeMotDePasseDto dto) {
+        return utilisateurService.changeMotDePasse(id, dto);
+    }
+
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUtilisateur(@PathVariable int id) {
         if (utilisateurService.getUtilisateurById(id).isPresent()) {
             utilisateurService.deleteUtilisateur(id);

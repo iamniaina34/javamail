@@ -15,10 +15,10 @@ public class Utilisateur {
     @Column(name = "pseudo", nullable = false, unique = true, length = 32)
     private String pseudo;
 
-    @Column(name = "mail", nullable = false, unique = true, length = 64)
-    private String mail;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
-    @Column(name = "mot_de_passe", nullable = false, length = 32)
+    @Column(name = "mot_de_passe", nullable = false, length = 255)
     @JsonIgnore
     private String motDePasse;
 
@@ -29,18 +29,23 @@ public class Utilisateur {
     @Column(name = "est_supprime", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean estSupprime = false;
 
-    public Utilisateur(int id, String pseudo, String mail, String motDePasse, TypeUtilisateur type, boolean estSupprime) {
+    public Utilisateur(int id, String pseudo, String email, String motDePasse, TypeUtilisateur type, boolean estSupprime) {
         this.id = id;
         this.pseudo = pseudo;
-        this.mail = mail;
+        this.email = email;
         this.motDePasse = motDePasse;
         this.type = type;
         this.estSupprime = estSupprime;
     }
 
-    public Utilisateur(String pseudo, String mail, String motDePasse) {
+    public Utilisateur(String pseudo, String email, String motDePasse) {
         this.pseudo = pseudo;
-        this.mail = mail;
+        this.email = email;
+        this.motDePasse = motDePasse;
+    }
+
+    public Utilisateur(String pseudo, String motDePasse) {
+        this.pseudo = pseudo;
         this.motDePasse = motDePasse;
     }
 
@@ -59,12 +64,12 @@ public class Utilisateur {
         this.pseudo = pseudo;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getMotDePasse() {
