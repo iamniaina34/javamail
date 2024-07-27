@@ -1,6 +1,7 @@
 package com.javatech.javamail.controllers;
 
 import com.javatech.javamail.dtos.LoginDto;
+import com.javatech.javamail.dtos.RegisterDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,21 @@ public class UserController {
             return ResponseEntity.ok(user.getUsername());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Object> loginUser(@RequestBody RegisterDto dto) {
+        Optional<User> userOptional = Optional.ofNullable(userService.findByUsername(dto.getUsername()));
+        if (userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User " + userOptional.get().getUsername() + " already exists");
+        } else {
+            User user = new User();
+            user.setUsername(dto.getUsername());
+            user.setEmail(dto.getEmail());
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+            User createdUser = userService.save(user);
+            return ResponseEntity.ok(createdUser);
         }
     }
 
