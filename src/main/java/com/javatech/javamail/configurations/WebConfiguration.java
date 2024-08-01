@@ -15,7 +15,7 @@ public class WebConfiguration implements WebMvcConfigurer {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:8000") // Replace with your frontend URL
+                        .allowedOriginPatterns("http://127.0.0.1:8000", "http://192.168.*.*:8000") // Replace with your frontend URL
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(true);

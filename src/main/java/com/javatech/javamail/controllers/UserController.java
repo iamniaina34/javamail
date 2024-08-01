@@ -40,14 +40,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<Object> loginUser(@RequestBody LoginDto loginDto) {
         Optional<User> userOptional = Optional.ofNullable(userService.findByUsername(loginDto.getUsername()));
         if (userOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-        User user = userOptional.get();
-        if (passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
-            return ResponseEntity.ok(user.getUsername());
+        User loginUser = userOptional.get();
+        if (passwordEncoder.matches(loginDto.getPassword(), loginUser.getPassword())) {
+            return ResponseEntity.ok(loginUser);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
