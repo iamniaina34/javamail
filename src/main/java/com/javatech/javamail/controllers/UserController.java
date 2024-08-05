@@ -2,7 +2,6 @@ package com.javatech.javamail.controllers;
 
 import com.javatech.javamail.dtos.LoginDto;
 import com.javatech.javamail.dtos.RegisterDto;
-import com.javatech.javamail.dtos.ResetDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping
+    @GetMapping({"", "/", "index"})
     public List<User> getAllUsers() {
         return userService.findAll();
     }
@@ -35,7 +34,7 @@ public class UserController {
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping({"", "/", "create"})
     public User createUser(@RequestBody RegisterDto dto) {
         User user = new User();
         user.setUsername(dto.getUsername());
