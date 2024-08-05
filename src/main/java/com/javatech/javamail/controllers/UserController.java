@@ -2,7 +2,6 @@ package com.javatech.javamail.controllers;
 
 import com.javatech.javamail.dtos.LoginDto;
 import com.javatech.javamail.dtos.RegisterDto;
-import com.javatech.javamail.dtos.ResetDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

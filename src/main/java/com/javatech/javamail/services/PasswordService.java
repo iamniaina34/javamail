@@ -43,7 +43,7 @@ public class PasswordService {
         return resetToken.map(PasswordResetToken::getUser).orElse(null);
     }
     public void updateUserPassword(User user, String newPassword) {
-        user.setPassword(newPassword); // Ensure the password is encoded properly
+        user.setPassword(newPassword);
         userService.save(user);
     }
 }

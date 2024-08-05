@@ -1,5 +1,6 @@
 package com.javatech.javamail.controllers;
 
+import com.javatech.javamail.dtos.ChangePasswordDto;
 import com.javatech.javamail.dtos.ResetDto;
 import com.javatech.javamail.models.User;
 import com.javatech.javamail.services.EmailService;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.InetAddress;
@@ -24,14 +26,17 @@ public class PasswordController {
     private final EmailService emailService;
     @Autowired
     private final PasswordService passwordService;
+    @Autowired
+    private final PasswordEncoder encoder;
 
-    public PasswordController(UserService userService, EmailService emailService, PasswordService passwordService) {
+    public PasswordController(UserService userService, EmailService emailService, PasswordService passwordService, PasswordEncoder encoder) {
         this.userService = userService;
         this.emailService = emailService;
         this.passwordService = passwordService;
+        this.encoder = encoder;
     }
 
-    @PostMapping("/reset")
+    @PostMapping({"/reset", "/reset/"})
     public ResponseEntity<Object> resetPassword(@RequestBody ResetDto dto) {
         User user = userService.findByEmail(dto.getEmail());
         if (user == null) {
@@ -56,14 +61,13 @@ public class PasswordController {
         }
     }
 
-    private static @NotNull String getResetLink(String token) {
-        StringBuilder ipAddress = new StringBuilder();
-        try {
-            InetAddress localHost = InetAddress.getLocalHost();
-            ipAddress.append(localHost.getHostAddress());
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
+    @PutMapping({"", "/", "/change-password"})
+    public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDto dto) {
+        User user = userService.findByEmail(dto.getTo());
+        if (user != null) {
+            passwordService.updateUserPassword(user, encoder.encode(dto.getPassword()));
+            return ResponseEntity.ok(user);
         }
-        return "http://" + ipAddress + ":8080/api/password/confirm-reset/" + token;
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
     }
 }

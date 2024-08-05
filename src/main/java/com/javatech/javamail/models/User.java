@@ -21,10 +21,10 @@ public class User {
     @Column(name = "username", nullable = false, unique = true, length = 32)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true, length = 255)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", nullable = false)
     @JsonIgnore
     private String password;
 
