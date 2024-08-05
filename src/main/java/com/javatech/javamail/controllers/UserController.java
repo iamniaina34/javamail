@@ -73,6 +73,16 @@ public class UserController {
         }
     }
 
+    @PostMapping("/reset_password")
+    public ResponseEntity<Object> resetPassword(@RequestBody ResetDto dto) {
+        User user = userService.findByEmail(dto.getEmail());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User userDetails) {
         Optional<User> optionalUser = userService.findById(id);
