@@ -6,15 +6,11 @@ import com.javatech.javamail.models.User;
 import com.javatech.javamail.services.EmailService;
 import com.javatech.javamail.services.PasswordService;
 import com.javatech.javamail.services.UserService;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 @RestController
 @RequestMapping("/api/password")
