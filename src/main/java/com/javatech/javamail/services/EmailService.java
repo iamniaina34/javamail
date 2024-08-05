@@ -49,6 +49,19 @@ public class EmailService {
             pinCodeCache.put(to, pinCode);
     }
 
+    @Async
+    public void sendPasswordResetEmail (String to, String resetLink) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Reinitialiser votre mot de passe");
+        message.setText("Bonjour, \n" +
+                "Nous avons entendu que vous avez oublié votre mot de passe. " +
+                "Ce n'est pas grave! Vous pouvez le reinitialiser en cliquant sur le lien ci dessous\n" +
+                resetLink + "\n\n" +
+                "De la part de votre petit equipe, TinyTasker");
+        emailSender.send(message);
+    }
+
     private String generatePinCode() {
         Random random = new Random();
         int pin = 100000 + random.nextInt(900000);

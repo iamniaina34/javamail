@@ -24,7 +24,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping
+    @GetMapping({"", "/", "index"})
     public List<User> getAllUsers() {
         return userService.findAll();
     }
@@ -35,7 +35,7 @@ public class UserController {
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping({"", "/", "create"})
     public User createUser(@RequestBody RegisterDto dto) {
         User user = new User();
         user.setUsername(dto.getUsername());
@@ -70,16 +70,6 @@ public class UserController {
             user.setPassword(passwordEncoder.encode(dto.getPassword()));
             User createdUser = userService.save(user);
             return ResponseEntity.ok(createdUser);
-        }
-    }
-
-    @PostMapping("/reset_password")
-    public ResponseEntity<Object> resetPassword(@RequestBody ResetDto dto) {
-        User user = userService.findByEmail(dto.getEmail());
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(user);
         }
     }
 
