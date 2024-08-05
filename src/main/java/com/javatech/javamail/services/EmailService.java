@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.net.UnknownHostException;
 import java.util.Random;
 import java.util.concurrent.ConcurrentMap;
 
@@ -29,7 +30,7 @@ public class EmailService {
     }
 
     @Async
-    public void sendPinCodeMessage(String to, String subject) {
+    public void sendPinCodeMessage(String to, String subject) throws Exception {
         String pinCode = generatePinCode();
         String htmlContent = "<html>" +
                 "<body>" +
@@ -39,8 +40,6 @@ public class EmailService {
                 "<p><i>TinyTasker</i></p>" +
                 "</body>" +
                 "</html>";
-
-        try {
             MimeMessage message = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(to);
@@ -48,10 +47,8 @@ public class EmailService {
             helper.setText(htmlContent, true);
             emailSender.send(message);
             pinCodeCache.put(to, pinCode);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
     }
+
     private String generatePinCode() {
         Random random = new Random();
         int pin = 100000 + random.nextInt(900000);

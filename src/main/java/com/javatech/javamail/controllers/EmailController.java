@@ -5,6 +5,7 @@ import com.javatech.javamail.dtos.EmailDto;
 import com.javatech.javamail.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +19,15 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping("/sendPinCodeEmail")
-    public String sendPinCodeEmail(@RequestBody EmailDto emailDto) {
-        emailService.sendPinCodeMessage(emailDto.getTo(), "Confirmer votre email");
-        return "Confirmation email sent successfully";
+    public ResponseEntity<String> sendPinCodeEmail(@RequestBody EmailDto emailDto) {
+        try {
+            emailService.sendPinCodeMessage(emailDto.getTo(), "Confirmer votre email");
+        } catch (MailSendException e) {
+            return ResponseEntity.internalServerError().body("Couldn't connect to host");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok("Confirmation email sent successfully");
     }
 
     @PostMapping("/confirmPinCodeEmail")

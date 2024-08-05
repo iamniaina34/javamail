@@ -28,5 +28,5 @@ public class User {
     private String password;
 
     @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT(1)")
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 }

@@ -2,6 +2,7 @@ package com.javatech.javamail.controllers;
 
 import com.javatech.javamail.dtos.LoginDto;
 import com.javatech.javamail.dtos.RegisterDto;
+import com.javatech.javamail.dtos.ResetDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,11 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
+    public User createUser(@RequestBody RegisterDto dto) {
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         return userService.save(user);
     }
 
