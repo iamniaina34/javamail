@@ -39,7 +39,7 @@ public class PasswordController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
         } else {
             String token = passwordService.createPasswordResetToken(user);
-            String resetLink = "http://192.168.48.49:8000/confirmer-reinitialiser/" + token;
+            String resetLink = dto.getClientAddress() + "/" + token;
             emailService.sendPasswordResetEmail(dto.getEmail(), resetLink);
             return ResponseEntity.status(HttpStatus.OK).body(user);
         }
