@@ -44,7 +44,7 @@ public class PasswordController {
             try {
                 emailService.sendPasswordResetEmail(dto.getEmail(), resetLink);
             } catch (MailSendException e) {
-                return ResponseEntity.internalServerError().body("Failed to connect to host, try again later");
+                return ResponseEntity.internalServerError().body("Failed to connect to host, try again later.");
             } catch (Exception e) {
                 e.printStackTrace();
             }
