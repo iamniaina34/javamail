@@ -13,8 +13,6 @@ import org.springframework.mail.MailSendException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.UnknownHostException;
-
 @RestController
 @RequestMapping("/api/password")
 public class PasswordController {
