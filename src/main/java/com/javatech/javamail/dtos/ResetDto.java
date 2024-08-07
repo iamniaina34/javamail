@@ -9,4 +9,9 @@ import org.jetbrains.annotations.NotNull;
 public class ResetDto {
     @NotNull
     private String email;
+    /**
+     * The client endpoint which will handle password resetting
+     */
+    @NotNull
+    private String clientAddress;
 }
