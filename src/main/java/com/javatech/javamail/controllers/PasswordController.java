@@ -9,8 +9,11 @@ import com.javatech.javamail.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.UnknownHostException;
 
 @RestController
 @RequestMapping("/api/password")
@@ -40,7 +43,13 @@ public class PasswordController {
         } else {
             String token = passwordService.createPasswordResetToken(user);
             String resetLink = dto.getClientAddress() + "/" + token;
-            emailService.sendPasswordResetEmail(dto.getEmail(), resetLink);
+            try {
+                emailService.sendPasswordResetEmail(dto.getEmail(), resetLink);
+            } catch (MailSendException e) {
+                return ResponseEntity.internalServerError().body("Failed to connect to host, try again later");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return ResponseEntity.status(HttpStatus.OK).body(user);
         }
     }

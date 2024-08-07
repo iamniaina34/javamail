@@ -48,7 +48,7 @@ public class EmailService {
     }
 
     @Async
-    public void sendPasswordResetEmail (String to, String resetLink) {
+    public void sendPasswordResetEmail (String to, String resetLink) throws Exception {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject("Reinitialiser votre mot de passe");
