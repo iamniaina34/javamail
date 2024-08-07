@@ -66,7 +66,7 @@ public class PasswordController {
 
     @PutMapping({"", "/", "/change-password"})
     public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDto dto) {
-        User user = userService.findByEmail(dto.getTo());
+        User user = userService.findByEmail(dto.getEmail());
         if (user != null) {
             passwordService.updateUserPassword(user, encoder.encode(dto.getPassword()));
             return ResponseEntity.ok(user);

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 @Setter
 public class ChangePasswordDto {
     @NotNull
-    private String to;
+    private String email;
     @NotNull
     private String password;
 }
